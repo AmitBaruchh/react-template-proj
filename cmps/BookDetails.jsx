@@ -30,6 +30,8 @@ export function BookDetails({ bookId, onBack }) {
     } = book
     const { amount, currencyCode, isOnSale } = listPrice
 
+    const readingType = bookService.getReadingType(pageCount)
+
     return (
         <section className="book-details">
             <div className="book-details-titles">
@@ -51,7 +53,9 @@ export function BookDetails({ bookId, onBack }) {
                     </div>
                     <div className="detail-item">
                         <h5>Page Count:</h5>
-                        <p>{pageCount} pages</p>
+                        <p>
+                            {pageCount} pages - {readingType}
+                        </p>
                     </div>
                     <div className="detail-item">
                         <h5>Categories:</h5>

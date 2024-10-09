@@ -14,3 +14,9 @@
 .book-preview img {
     max-width: 100px;
 }
+
+.book-preview p {
+    font-style: italic;
+    margin: 20px 10px 0;
+    color: #555;
+}
