@@ -1,4 +1,4 @@
-.car-list {
+.book-list {
     list-style: none;
     padding: 15px 0 0;
     display: grid;
@@ -6,7 +6,7 @@
     gap: 15px;
 }
 
-.car-list li {
+.book-list li {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
