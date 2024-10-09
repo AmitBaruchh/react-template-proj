@@ -3,3 +3,14 @@
     color: var(--clr1bg);
     padding-block: 1em;
 }
+
+.app-header section:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.app-header .app-nav {
+    display: flex;
+    gap: 15px;
+}
