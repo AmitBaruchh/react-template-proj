@@ -31,6 +31,7 @@ export function BookDetails({ bookId, onBack }) {
     const { amount, currencyCode, isOnSale } = listPrice
 
     const readingType = bookService.getReadingType(pageCount)
+    const publicationType = bookService.getPublicationType(publishedDate)
 
     return (
         <section className="book-details">
@@ -63,7 +64,7 @@ export function BookDetails({ bookId, onBack }) {
                     </div>
                     <div className="detail-item">
                         <h5>Published Date:</h5>
-                        <p>{publishedDate}</p>
+                        <p>{`${publishedDate} - ${publicationType}`}</p>
                     </div>
                     <div className="detail-item">
                         <h5>Language:</h5>

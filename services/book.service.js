@@ -12,6 +12,7 @@ export const bookService = {
     getEmptyBook,
     getDefaultFilter,
     getReadingType,
+    getPublicationType,
 }
 
 function query(filterBy = {}) {
@@ -59,6 +60,16 @@ function getReadingType(pageCount) {
         return 'Decent Reading'
     } else if (pageCount <= 100) {
         return 'Light Reading'
+    }
+    return ''
+}
+
+function getPublicationType(publishedDate) {
+    const currentYear = new Date().getFullYear()
+    if (currentYear - publishedDate > 10) {
+        return 'Vintage'
+    } else if (currentYear - publishedDate < 1) {
+        return 'New'
     }
     return ''
 }
