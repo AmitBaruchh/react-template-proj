@@ -61,3 +61,11 @@
 .book-details-button button:hover {
     background-color: var(--clr2);
 }
+
+.price-red {
+    color: red !important;
+}
+
+.price-green {
+    color: green !important;
+}

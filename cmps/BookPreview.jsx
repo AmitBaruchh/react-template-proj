@@ -6,11 +6,12 @@ export function BookPreview({ book }) {
 
     const readingType = bookService.getReadingType(pageCount)
     const publicationType = bookService.getPublicationType(publishedDate)
+    const priceClass = amount > 150 ? 'price-red' : amount < 20 ? 'price-green' : ''
 
     return (
         <article className="book-preview">
             <h2> {title}</h2>
-            <h4>
+            <h4 className={priceClass}>
                 {currencyCode} {amount}
             </h4>
             <img src={thumbnail} alt={`Cover of ${title}`} />

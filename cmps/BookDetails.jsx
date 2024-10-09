@@ -32,6 +32,7 @@ export function BookDetails({ bookId, onBack }) {
 
     const readingType = bookService.getReadingType(pageCount)
     const publicationType = bookService.getPublicationType(publishedDate)
+    const priceClass = amount > 150 ? 'price-red' : amount < 20 ? 'price-green' : ''
 
     return (
         <section className="book-details">
@@ -42,7 +43,12 @@ export function BookDetails({ bookId, onBack }) {
             <div className="book-details-content">
                 <div className="text-content">
                     <h4>
-                        Price: {currencyCode} {amount} {isOnSale && <span>(On Sale!)</span>}
+                        Price:
+                        <span className={priceClass}>
+                            {' '}
+                            {currencyCode} {amount}
+                        </span>
+                        {isOnSale && <span>(On Sale!)</span>}
                     </h4>
                     <div className="detail-item">
                         <h5>Authors:</h5>
