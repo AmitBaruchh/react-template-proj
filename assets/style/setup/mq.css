@@ -1,0 +1,12 @@
+@media (max-width: 485px) {
+    .on-sale-sign {
+        top: 2em;
+        right: -13em;
+        width: 9em;
+        font-size: 0.7em;
+        padding: 0.4em 0.8em;
+    }
+    .book-list {
+        grid-template-columns: 1fr;
+    }
+}

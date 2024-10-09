@@ -2,7 +2,7 @@ import { bookService } from '../services/book.service.js'
 
 export function BookPreview({ book }) {
     const { title, listPrice, thumbnail, pageCount, publishedDate } = book
-    const { amount, currencyCode } = listPrice
+    const { amount, currencyCode, isOnSale } = listPrice
 
     const readingType = bookService.getReadingType(pageCount)
     const publicationType = bookService.getPublicationType(publishedDate)
@@ -10,6 +10,7 @@ export function BookPreview({ book }) {
 
     return (
         <article className="book-preview">
+            {isOnSale && <div className="on-sale-sign">On Sale</div>}
             <h2> {title}</h2>
             <h4 className={priceClass}>
                 {currencyCode} {amount}
