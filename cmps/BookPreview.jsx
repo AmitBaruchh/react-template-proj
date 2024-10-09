@@ -1,13 +1,14 @@
 export function BookPreview({ book }) {
-    const { title, listPrice } = book
+    const { title, listPrice, thumbnail } = book
 
     const { amount, currencyCode } = listPrice
     return (
         <article className="book-preview">
-            <h2>Title: {title}</h2>
+            <h2> {title}</h2>
             <h4>
-                Price: {currencyCode} {amount}
+                {currencyCode} {amount}
             </h4>
+            <img src={thumbnail} alt={`Cover of ${title}`} />
         </article>
     )
 }
