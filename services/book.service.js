@@ -13,6 +13,8 @@ export const bookService = {
     getDefaultFilter,
     getReadingType,
     getPublicationType,
+    getById,
+    getBookLng,
 }
 
 function query(filterBy = {}) {
@@ -29,6 +31,10 @@ function query(filterBy = {}) {
 }
 
 function get(bookId) {
+    return storageService.get(BOOK_KEY, bookId)
+}
+
+function getById(bookId) {
     return storageService.get(BOOK_KEY, bookId)
 }
 
@@ -72,6 +78,17 @@ function getPublicationType(publishedDate) {
         return 'New'
     }
     return ''
+}
+
+function getBookLng(lng) {
+    switch (lng) {
+        case 'he':
+            return 'Hebrew'
+        case 'sp':
+            return 'Spanish'
+        default:
+            return 'English'
+    }
 }
 
 function _createBooks() {

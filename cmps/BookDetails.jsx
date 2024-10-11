@@ -2,20 +2,7 @@ import { bookService } from '../services/book.service.js'
 
 const { useEffect, useState } = React
 
-export function BookDetails({ bookId, onBack }) {
-    const [book, setBook] = useState(null)
-
-    useEffect(() => {
-        bookService
-            .get(bookId)
-            .then(setBook)
-            .catch(err => {
-                console.log('Problem getting book:', err)
-            })
-    }, [])
-
-    if (!book) return <div>Loading...</div>
-
+export function BookDetails({ book, onBack, onEdit }) {
     const {
         title,
         subtitle,
@@ -32,6 +19,7 @@ export function BookDetails({ bookId, onBack }) {
 
     const readingType = bookService.getReadingType(pageCount)
     const publicationType = bookService.getPublicationType(publishedDate)
+    const bookLanguage = bookService.getBookLng(language)
     const priceClass = amount > 150 ? 'price-red' : amount < 20 ? 'price-green' : ''
 
     return (
@@ -74,13 +62,16 @@ export function BookDetails({ bookId, onBack }) {
                     </div>
                     <div className="detail-item">
                         <h5>Language:</h5>
-                        <p>{language}</p>
+                        <p>{bookLanguage}</p>
                     </div>
                 </div>
                 <img src={thumbnail} alt={`Cover of ${title}`} />
             </div>
             <div className="book-details-button">
-                <button onClick={onBack}>Back</button>
+                <button onClick={onBack}>⬅ Back</button>
+                <button className="on-edit-btn" onClick={onEdit}>
+                    Edit ➡
+                </button>
             </div>
         </section>
     )
