@@ -34,7 +34,7 @@ export function BookFilter({ filterBy, onSetFilter }) {
                 <input onChange={handleChange} value={title} type="text" name="title" id="title" />
 
                 <label htmlFor="price">Price</label>
-                <input onChange={handleChange} value={price} type="number" name="price" id="price" />
+                <input onChange={handleChange} value={price || ''} type="number" name="price" id="price" />
 
                 <button>Submit</button>
             </form>
