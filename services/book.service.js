@@ -177,7 +177,7 @@ function _createBooks() {
                 description: 'senectus habitant nam imperdiet nostra elit dapibus nisl adipiscing in',
                 pageCount: 748,
                 categories: ['Computers', 'Hack'],
-                thumbnail: 'http://coding-academy.org/books-photos/1.jpg',
+                thumbnail: 'http://www.coding-academy.org/books-photos/1.jpg',
                 language: 'en',
                 listPrice: {
                     amount: 91,
