@@ -1,15 +1,14 @@
 import { bookService } from '../services/book.service.js'
 import { BookList } from '../cmps/BookList.jsx'
-import { BookDetails } from './BookDetails.jsx'
 import { BookFilter } from '../cmps/BookFilter.jsx'
-import { BookEdit } from './BookEdit.jsx'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 
 const { useState, useEffect } = React
 
 export function BookIndex() {
     const [books, setBooks] = useState(null)
     const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter())
-    const [isEdit, setIsEdit] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         loadBook()
@@ -21,21 +20,33 @@ export function BookIndex() {
             .then(setBooks)
             .catch(err => {
                 console.log('err:', err)
+                showErrorMsg('Failed to load the books')
             })
+            .finally(() => setIsLoading(false))
     }
 
     function onRemoveBook(bookId) {
         bookService
             .remove(bookId)
-            .then(() => setBooks(books => books.filter(book => book.id !== bookId)))
-            .catch(err => console.log('err:', err))
+            .then(() => {
+                setBooks(books => books.filter(book => book.id !== bookId))
+                showSuccessMsg('Book removed successfully')
+            })
+            .catch(err => {
+                console.log('Problems removing book', err)
+                showErrorMsg(`Problems removing book ${bookId}`)
+            })
     }
 
     function onSetFilter(filterByToEdit) {
         setFilterBy(prevFilter => ({ ...prevFilter, ...filterByToEdit }))
     }
 
-    if (!books) return <div>Loading..</div>
+    if (isLoading) return <div>Loading..</div>
+    if (!books || !books.length) {
+        showErrorMsg('No books found for the given filter')
+        return <div> No Books found...</div>
+    }
     return (
         <main className="book-index">
             <React.Fragment>

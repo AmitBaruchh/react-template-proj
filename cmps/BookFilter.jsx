@@ -26,6 +26,7 @@ export function BookFilter({ filterBy, onSetFilter }) {
 
     const { title, price } = filterByToEdit
 
+
     return (
         <section className="book-filter">
             <h2>Filter Our Books</h2>

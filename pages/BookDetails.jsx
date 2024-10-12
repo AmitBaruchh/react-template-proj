@@ -19,6 +19,7 @@ export function BookDetails() {
             .then(setBook)
             .catch(err => {
                 console.log('Problem getting book:', err)
+                showErrorMsg('Failed to load the book details')
             })
     }
 

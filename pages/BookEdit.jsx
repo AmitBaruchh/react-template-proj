@@ -41,9 +41,11 @@ export function BookEdit() {
             .save(bookToEdit)
             .then(book => {
                 console.log('Book Saved')
+                showSuccessMsg('Book updated successfully')
             })
             .catch(err => {
                 console.log('err:', err)
+                showErrorMsg('Error updating book')
             })
             .finally(() => {
                 navigate('/book')
@@ -51,6 +53,7 @@ export function BookEdit() {
     }
 
     function onCancelEdit() {
+        showErrorMsg('Edit cancelled')
         setBookToEdit(null)
         navigate('/book')
     }
