@@ -1,25 +1,34 @@
 const { useState } = React
+const Router = ReactRouterDOM.HashRouter
+const { Routes, Route, Navigate } = ReactRouterDOM
 
 import { Home } from './pages/Home.jsx'
 import { AppHeader } from './cmps/AppHeader.jsx'
 import { About } from './pages/About.jsx'
 import { BookIndex } from './pages/BookIndex.jsx'
+import { NotFound } from './cmps/NotFound.jsx'
+import { BookDetails } from './pages/BookDetails.jsx'
+import { BookEdit } from './pages/BookEdit.jsx'
 
 export function App() {
-    const [page, setPage] = useState('book')
-
     return (
-        <section className="app">
-            <AppHeader onSetPage={page => setPage(page)} />
+        <Router>
+            <section className="app">
+                <AppHeader />
+                <main className="main-layout">
+                    <Routes>
+                        <Route path="/" element={<Navigate to="/home" />} />
+                        <Route path="/home" element={<Home />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/book" element={<BookIndex />} />
+                        <Route path="/book/:bookId" element={<BookDetails />} />
+                        <Route path="/book/edit" element={<BookEdit />} />
+                        <Route path="/book/edit/:bookId" element={<BookEdit />} />
 
-            <header className="app-header main-layout">
-                <h1>My App</h1>
-            </header>
-            <main className="main-layout">
-                {page === 'home' && <Home />}
-                {page === 'about' && <About />}
-                {page === 'book' && <BookIndex />}
-            </main>
-        </section>
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </main>
+            </section>
+        </Router>
     )
 }

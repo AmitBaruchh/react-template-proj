@@ -51,8 +51,8 @@ function save(book) {
     }
 }
 
-function getEmptyBook(title = '', listPrice = { amount: 0, currencyCode: 'USD' }) {
-    return { title, listPrice }
+function getEmptyBook(title = '', description = '', listPrice = { amount: 0, currencyCode: 'USD', isOnSale: false }) {
+    return { title, description, listPrice }
 }
 
 function getDefaultFilter() {

@@ -1,7 +1,20 @@
-const { useState } = React
+const { useState, useEffect } = React
+const { useNavigate, useParams } = ReactRouterDOM
 
-export function BookEdit({ book, onUpdate, onCancelEdit }) {
-    const [bookToEdit, setBookToEdit] = useState({ ...book })
+import { bookService } from '../services/book.service.js'
+
+export function BookEdit() {
+    const [bookToEdit, setBookToEdit] = useState(bookService.getEmptyBook())
+    const navigate = useNavigate()
+    const { bookId } = useParams()
+
+    useEffect(() => {
+        if (bookId) loadBook()
+    }, [])
+
+    function loadBook() {
+        bookService.get(bookId).then(setBookToEdit)
+    }
 
     function handleChange({ target }) {
         let { value, name: field, type } = target
@@ -15,28 +28,35 @@ export function BookEdit({ book, onUpdate, onCancelEdit }) {
                 value = target.checked
                 break
         }
-        setBookToEdit(prevBook => ({ ...prevBook, [field]: value }))
-    }
-
-    function handleListPriceChange({ target }) {
-        let { value, name: field, type } = target
-        switch (type) {
-            case 'number':
-            case 'range':
-                value = +value
-                break
-
-            case 'checkbox':
-                value = target.checked
-                break
+        if (field === 'amount' || field === 'isOnSale') {
+            setBookToEdit(prevBook => ({ ...prevBook, listPrice: { ...prevBook.listPrice, [field]: value } }))
+        } else {
+            setBookToEdit(prevBook => ({ ...prevBook, [field]: value }))
         }
-        setBookToEdit(prevBook => ({ ...prevBook, listPrice: { ...book.listPrice, [field]: value } }))
     }
 
     function onSaveBook(ev) {
         ev.preventDefault()
-        onUpdate(bookToEdit)
+        bookService
+            .save(bookToEdit)
+            .then(book => {
+                console.log('Book Saved')
+            })
+            .catch(err => {
+                console.log('err:', err)
+            })
+            .finally(() => {
+                navigate('/book')
+            })
     }
+
+    function onCancelEdit() {
+        setBookToEdit(null)
+        navigate('/book')
+    }
+
+    const { title, description, listPrice } = bookToEdit
+    const { amount, isOnSale } = listPrice
 
     return (
         <section className="book-edit">
@@ -48,7 +68,7 @@ export function BookEdit({ book, onUpdate, onCancelEdit }) {
                         type="text"
                         placeholder="Enter New Title"
                         name="title"
-                        value={bookToEdit.title}
+                        value={title}
                         onChange={handleChange}
                     />
                 </div>
@@ -59,20 +79,14 @@ export function BookEdit({ book, onUpdate, onCancelEdit }) {
                         type="text"
                         placeholder="Enter New Title"
                         name="description"
-                        value={bookToEdit.description}
+                        value={description}
                         onChange={handleChange}
                     />
                 </div>
 
                 <div className="book-details-info-row">
                     <label className="book-details-info-title">Price:</label>
-                    <input
-                        type="number"
-                        placeholder="Set Price"
-                        name="amount"
-                        onChange={handleListPriceChange}
-                        value={bookToEdit.listPrice.amount}
-                    />
+                    <input type="number" placeholder="Set Price" name="amount" onChange={handleChange} value={amount} />
                 </div>
 
                 <div className="book-details-info-row">
@@ -81,8 +95,8 @@ export function BookEdit({ book, onUpdate, onCancelEdit }) {
                         type="checkbox"
                         placeholder="Set Price"
                         name="isOnSale"
-                        onChange={handleListPriceChange}
-                        checked={bookToEdit.listPrice.isOnSale}
+                        onChange={handleChange}
+                        checked={isOnSale}
                     />
                 </div>
 
