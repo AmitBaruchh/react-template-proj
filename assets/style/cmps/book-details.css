@@ -47,16 +47,17 @@
     align-self: flex-start;
 }
 
-.book-details-button {
+.book-details-buttons {
     display: flex;
     justify-content: center;
 }
 
-.book-details-button button {
+.book-details-buttons button,
+.back-button-container button {
     width: 100%;
     padding: 10px;
     font-size: 1em;
-    background-color: var(--clr1);
+    background-color: var(--clr2);
     color: white;
     border: none;
     border-radius: 5px;
@@ -64,8 +65,16 @@
     text-align: center;
 }
 
-.book-details-button button:hover {
-    background-color: var(--clr2);
+.back-button-container button {
+    background-color: var(--clr1);
+}
+
+.book-details-buttons button:hover {
+    background-color: var(--clr2bg);
+}
+
+.back-button-container button:hover {
+    background-color: var(--clr1bg);
 }
 
 .price-red {
@@ -88,7 +97,7 @@
 }
 
 .book-details nav a:hover {
-    background-color: var(--clr2);
+    background-color: var(--clr1bg);
 }
 
 .review-table {

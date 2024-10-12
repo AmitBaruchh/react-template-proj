@@ -142,7 +142,9 @@ export function BookDetails() {
                                     <td>{bookService.getStarRating(rev.rating)}</td>
                                     <td>{rev.readAt}</td>
                                     <td>
-                                        <button className="delete-btn" onClick={() => onDeleteReview(idx)}>Delete</button>
+                                        <button className="delete-btn" onClick={() => onDeleteReview(idx)}>
+                                            Delete
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -157,11 +159,18 @@ export function BookDetails() {
                 <Link to={`/book/${bookId}/add-review`}>Add review</Link>
             </nav>
             <Outlet />
-            <div className="book-details-button">
-                <button onClick={onBack}>⬅ Back</button>
-                {/* <button className="on-edit-btn" onClick={onEdit}>
-                    Edit ➡
-                </button> */}
+            <div className="book-details-buttons">
+                <button>
+                    <Link to={`/book/${book.prevBookId}`}>⬅ Prev Car</Link>
+                </button>
+                <button>
+                    <Link to={`/book/${book.nextBookId}`}>Next Car ➡</Link>
+                </button>
+            </div>
+            <div className="back-button-container">
+                <button className="back-btn" onClick={onBack}>
+                    Back
+                </button>
             </div>
         </section>
     )
