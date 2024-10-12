@@ -28,10 +28,8 @@ export function BookIndex() {
     function onRemoveBook(bookId) {
         bookService
             .remove(bookId)
-            .then(() => {
-                setBooks(books => books.filter(book => book.id !== bookId))
-                showSuccessMsg('Book removed successfully')
-            })
+            .then(() => setBooks(books => books.filter(book => book.id !== bookId)))
+            .then(() => showSuccessMsg('Book removed successfully'))
             .catch(err => {
                 console.log('Problems removing book', err)
                 showErrorMsg(`Problems removing book ${bookId}`)
