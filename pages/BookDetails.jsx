@@ -1,4 +1,4 @@
-const { useParams, useNavigate, Link } = ReactRouterDOM
+const { useParams, useNavigate, Link, Outlet } = ReactRouterDOM
 
 import { bookService } from '../services/book.service.js'
 
@@ -8,9 +8,11 @@ export function BookDetails() {
     const [book, setBook] = useState(null)
     const { bookId } = useParams()
     const navigate = useNavigate()
+    const [reviews, setReviews] = useState([])
 
     useEffect(() => {
         loadBook()
+        loadReviews()
     }, [bookId])
 
     function loadBook() {
@@ -23,8 +25,37 @@ export function BookDetails() {
             })
     }
 
+    function loadReviews() {
+        bookService
+            .getReviews(bookId)
+            .then(reviews => {
+                setReviews(reviews)
+            })
+            .catch(err => {
+                console.log('Error loading reviews:', err)
+            })
+    }
+
     function onBack() {
         navigate('/book')
+    }
+
+    function onDeleteReview(reviewIdx) {
+        const isConfirmed = window.confirm('Are you sure you want to delete this review?')
+        if (!isConfirmed) {
+            showErrorMsg('Review deletion was canceled')
+            return
+        }
+        bookService
+            .removeReview(bookId, reviewIdx)
+            .then(() => {
+                showSuccessMsg('Review deleted successfully!')
+                loadReviews()
+            })
+            .catch(err => {
+                console.error('Failed to delete review:', err)
+                showErrorMsg('Failed to delete review')
+            })
     }
 
     if (!book) return <div>Loading...</div>
@@ -92,6 +123,40 @@ export function BookDetails() {
                 </div>
                 <img src={thumbnail} alt={`Cover of ${title}`} />
             </div>
+
+            <section className="review-list">
+                <h4>Reviews:</h4>
+                {reviews.length ? (
+                    <table className="review-table">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Rating</th>
+                                <th>Date Read</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {reviews.map((rev, idx) => (
+                                <tr key={idx}>
+                                    <td>{rev.fullname}</td>
+                                    <td>{bookService.getStarRating(rev.rating)}</td>
+                                    <td>{rev.readAt}</td>
+                                    <td>
+                                        <button className="delete-btn" onClick={() => onDeleteReview(idx)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                ) : (
+                    <p>No reviews yet</p>
+                )}
+            </section>
+
+            <nav>
+                <Link to={`/book/${bookId}/add-review`}>Add review</Link>
+            </nav>
+            <Outlet />
             <div className="book-details-button">
                 <button onClick={onBack}>⬅ Back</button>
                 {/* <button className="on-edit-btn" onClick={onEdit}>

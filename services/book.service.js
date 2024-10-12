@@ -13,8 +13,12 @@ export const bookService = {
     getDefaultFilter,
     getReadingType,
     getPublicationType,
-    getById,
     getBookLng,
+    addReview,
+    removeReview,
+    getEmptyReview,
+    getReviews,
+    getStarRating,
 }
 
 function query(filterBy = {}) {
@@ -31,10 +35,6 @@ function query(filterBy = {}) {
 }
 
 function get(bookId) {
-    return storageService.get(BOOK_KEY, bookId)
-}
-
-function getById(bookId) {
     return storageService.get(BOOK_KEY, bookId)
 }
 
@@ -89,6 +89,40 @@ function getBookLng(lng) {
         default:
             return 'English'
     }
+}
+
+function addReview(bookId, review) {
+    return get(bookId).then(book => {
+        if (!book.reviews) book.reviews = []
+        book.reviews.push(review)
+        return save(book)
+    })
+}
+
+function removeReview(bookId, reviewIdx) {
+    return get(bookId).then(book => {
+        if (!book.reviews) return
+        book.reviews.splice(reviewIdx, 1)
+        return save(book)
+    })
+}
+
+function getEmptyReview() {
+    return {
+        fullname: '',
+        rating: 0,
+        readAt: new Date().toISOString().slice(0, 10),
+    }
+}
+
+function getReviews(bookId) {
+    return get(bookId).then(book => {
+        return book.reviews || []
+    })
+}
+
+function getStarRating(rating, maxStars = 5) {
+    return '★'.repeat(rating) + '☆'.repeat(maxStars - rating)
 }
 
 function _createBooks() {
