@@ -86,8 +86,10 @@ function getBookLng(lng) {
             return 'Hebrew'
         case 'sp':
             return 'Spanish'
-        default:
+        case 'en':
             return 'English'
+        default:
+            return lng
     }
 }
 
