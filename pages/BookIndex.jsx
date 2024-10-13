@@ -2,6 +2,7 @@ import { bookService } from '../services/book.service.js'
 import { BookList } from '../cmps/BookList.jsx'
 import { BookFilter } from '../cmps/BookFilter.jsx'
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
+import { AddGoogleBook } from '../cmps/AddGoogleBook.jsx'
 
 const { useState, useEffect } = React
 
@@ -40,6 +41,10 @@ export function BookIndex() {
         setFilterBy(prevFilter => ({ ...prevFilter, ...filterByToEdit }))
     }
 
+    function onSetBooks(newBook) {
+        setBooks(prevBooks => [...prevBooks, newBook])
+    }
+
     if (isLoading) return <div>Loading..</div>
     if (!books || !books.length) {
         showErrorMsg('No books found for the given filter')
@@ -49,6 +54,7 @@ export function BookIndex() {
         <main className="book-index">
             <React.Fragment>
                 <BookFilter onSetFilter={onSetFilter} filterBy={filterBy} />
+                <AddGoogleBook onSetBooks={onSetBooks} />
                 {!!books.length && <BookList books={books} onRemoveBook={onRemoveBook} />}
                 {!books.length && <div> No Books found...</div>}
             </React.Fragment>

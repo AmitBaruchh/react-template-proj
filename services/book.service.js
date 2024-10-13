@@ -1,4 +1,4 @@
-import { loadFromStorage, makeId, saveToStorage } from './util.service.js'
+import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
 
 const BOOK_KEY = 'bookDB'
@@ -19,6 +19,8 @@ export const bookService = {
     getEmptyReview,
     getReviews,
     getStarRating,
+    addGoogleBook,
+    getGoogleBooks,
 }
 
 function query(filterBy = {}) {
@@ -42,15 +44,13 @@ function remove(bookId) {
     return storageService.remove(BOOK_KEY, bookId)
 }
 
-function save(book) {
-    if (book.id) {
+function save(book, isGoogleBook = false) {
+    if (book.id && !isGoogleBook) {
         return storageService.put(BOOK_KEY, book)
     } else {
-        book.id = makeId()
-        return storageService.post(BOOK_KEY, book)
+        return storageService.post(BOOK_KEY, book, isGoogleBook)
     }
 }
-
 function getEmptyBook(title = '', description = '', listPrice = { amount: 0, currencyCode: 'USD', isOnSale: false }) {
     return { title, description, listPrice }
 }
@@ -125,6 +125,61 @@ function getStarRating(rating, maxStars = 5) {
     return '★'.repeat(rating) + '☆'.repeat(maxStars - rating)
 }
 
+function addGoogleBook(googleBook) {
+    return query()
+        .then(books => {
+            if (books.some(book => book.id === googleBook.id)) {
+                console.log('Book already exists in the database')
+                return Promise.reject('Book already exists')
+            }
+            return books
+        })
+        .then(() => {
+            const book = _formatGoogleBook(googleBook)
+            const isGoogleBook = true
+            return save(book, isGoogleBook)
+        })
+}
+
+function getGoogleBooks(searchTitle) {
+    return fetch(`https://www.googleapis.com/books/v1/volumes?printType=books&q=${searchTitle}`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Failed to fetch books')
+            }
+            return res.json()
+        })
+        .then(({ items }) => {
+            return items
+        })
+        .catch(err => {
+            console.log('err:', err)
+            throw err
+        })
+}
+
+function _formatGoogleBook(googleBook) {
+    const { volumeInfo } = googleBook
+    const book = {
+        id: googleBook.id || '',
+        title: volumeInfo.title,
+        subtitle: volumeInfo.subtitle || '',
+        authors: volumeInfo.authors || [],
+        publishedDate: volumeInfo.publishedDate || '',
+        description: volumeInfo.description || '',
+        pageCount: volumeInfo.pageCount || 0,
+        categories: volumeInfo.categories || [],
+        language: volumeInfo.language || '',
+        thumbnail: volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '',
+        listPrice: {
+            amount: 100,
+            currencyCode: 'EUR',
+            isOnSale: false,
+        },
+    }
+    return book
+}
+
 function _setNextPrevBookId(book) {
     return query().then(books => {
         const bookIdx = books.findIndex(currbook => currbook.id === book.id)
@@ -137,7 +192,7 @@ function _setNextPrevBookId(book) {
 }
 
 function _createBooks() {
-    let books = loadFromStorage(BOOK_KEY)
+    let books = utilService.loadFromStorage(BOOK_KEY)
     if (!books || !books.length) {
         books = [
             {
