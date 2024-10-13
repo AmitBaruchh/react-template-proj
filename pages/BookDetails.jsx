@@ -161,10 +161,10 @@ export function BookDetails() {
             <Outlet />
             <div className="book-details-buttons">
                 <button>
-                    <Link to={`/book/${book.prevBookId}`}>⬅ Prev Car</Link>
+                    <Link to={`/book/${book.prevBookId}`}>⬅ Prev Book</Link>
                 </button>
                 <button>
-                    <Link to={`/book/${book.nextBookId}`}>Next Car ➡</Link>
+                    <Link to={`/book/${book.nextBookId}`}>Next Book ➡</Link>
                 </button>
             </div>
             <div className="back-button-container">
