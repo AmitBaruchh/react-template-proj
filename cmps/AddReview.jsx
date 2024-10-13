@@ -33,7 +33,6 @@ export function AddReview() {
             .then(() => {
                 showSuccessMsg('Review added successfully!')
                 setReview(bookService.getEmptyReview())
-                loadReviews()
             })
             .catch(err => {
                 console.error('Failed to add review:', err)
